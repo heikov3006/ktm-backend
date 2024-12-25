@@ -1,0 +1,89 @@
+### GET request to example server
+GET https://examples.http-client.intellij.net/get
+    ?generated-in=IntelliJ IDEA
+
+###
+
+GET http://localhost:8080/maintenance
+Content-Type: */*
+
+###
+
+POST http://localhost:8080/maintenance/register
+Content-Type: application/json
+
+{
+  "firstname": "Heiko",
+  "lastname": "Vichtbauer",
+  "email": "heiko.v3006@gmail.com",
+  "password": "ja",
+  "passwordConfirm": "ja"
+}
+
+###
+
+POST http://localhost:8080/maintenance/login
+Content-Type: application/json
+
+{
+  "email": "heiko.v3006@gmail.com",
+  "password": "ja"
+}
+
+###
+
+POST http://localhost:8080/maintenance/editProfile
+Content-Type: application/json
+
+{
+  "email": "heiko.v3006@gmail.com",
+  "password": "ja",
+  "user": {
+    "firstname": "Hugo",
+    "lastname": "Vichtl",
+    "email": "vichti@gmail.com",
+    "password": "ja",
+    "bikeList": null
+  }
+}
+
+###
+
+POST http://localhost:8080/maintenance/login
+Content-Type: application/json
+
+{
+  "email": "vichti@gmail.com",
+  "password": "ja"
+}
+
+###
+
+POST http://localhost:8080/maintenance/delete
+Content-Type: application/json
+
+{
+  "email": "heiko.v3006@gmail.com",
+  "password": "ja"
+}
+
+###
+
+POST http://localhost:8080/maintenance/addBike
+Content-Type: application/json
+
+{
+  "email": "heiko.v3006@gmail.com",
+  "bikeId": 1,
+  "km": 1000
+}
+
+###
+
+POST http://localhost:8080/maintenance/deleteBikeFromUser
+Content-Type: application/json
+
+{
+  "email": "heiko.v3006@gmail.com",
+  "bikeId": 1
+}

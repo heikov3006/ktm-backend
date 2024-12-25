@@ -1,0 +1,46 @@
+INSERT INTO users (id, firstname, lastname, email, password)
+VALUES
+    (501, 'Max', 'Mustermann', 'max.mustermann@example.com', 'password123'),
+    (502, 'Lisa', 'Müller', 'lisa.mueller@example.com', 'password456'),
+    (503, 'Jan Schmidt', 'janschmidt', 'jan.schmidt@example.com', 'password789'),
+    (504, 'Anna Becker', 'annabecker', 'anna.becker@example.com', 'mypassword1'),
+    (505, 'Peter Fischer', 'peterfischer', 'peter.fischer@example.com', 'mypassword2'),
+    (506, 'Julia Braun', 'juliabraun', 'julia.braun@example.com', 'mypassword3'),
+    (507, 'Thomas Weber', 'thomasweber', 'thomas.weber@example.com', 'mypassword4'),
+    (508, 'Sophie Wagner', 'sophiewagner', 'sophie.wagner@example.com', 'mypassword5'),
+    (509, 'Daniel Schmidt', 'danielschmidt', 'daniel.schmidt@example.com', 'mypassword6'),
+    (510, 'Laura König', 'laurakoenig', 'laura.koenig@example.com', 'mypassword7'),
+    (511, 'Felix Hoffmann', 'felixhoffmann', 'felix.hoffmann@example.com', 'mypassword8'),
+    (512, 'Nina Keller', 'ninakeller', 'nina.keller@example.com', 'mypassword9'),
+    (513, 'Markus Klein', 'markusklein', 'markus.klein@example.com', 'mypassword10'),
+    (514, 'Lena Schwarz', 'lenaschwarz', 'lena.schwarz@example.com', 'mypassword11'),
+    (515, 'David Richter', 'davidrichter', 'david.richter@example.com', 'mypassword12'),
+    (516, 'Clara Zimmermann', 'clarazimmermann', 'clara.zimmermann@example.com', 'mypassword13'),
+    (517, 'Stefan Wolf', 'stefanwolf', 'stefan.wolf@example.com', 'mypassword14'),
+    (518, 'Eva Neumann', 'evaneumann', 'eva.neumann@example.com', 'mypassword15'),
+    (519, 'Tim Schwarz', 'timschwarz', 'tim.schwarz@example.com', 'mypassword16'),
+    (520, 'Marie Hartmann', 'mariehartmann', 'marie.hartmann@example.com', 'mypassword17');
+
+INSERT INTO bike (id, brand, model, productionnumber, productionyear)
+VALUES
+    (1, 'KTM', 'Duke 390', '12345', 2021),
+    (2, 'KTM', '1290 Super Adventure', '54321', 2020),
+    (3, 'KTM', '250 EXC-F', '67890', 2022),
+    (4, 'KTM', '890 Adventure', '13579', 2023),
+    (5, 'KTM', 'RC 125', '24680', 2021),
+    (6, 'KTM', '500 EXC-F', '11223', 2020),
+    (7, 'Husqvarna', 'FE 501', '33445', 2021),
+    (8, 'Husqvarna', 'TE 250i', '55667', 2022),
+    (9, 'Husqvarna', '701 Enduro', '77889', 2023),
+    (10, 'Husqvarna', 'Vitpilen 401', '99001', 2021),
+    (11, 'GasGas', 'EC 300', '22334', 2022),
+    (12, 'GasGas', 'MC 450F', '44556', 2023),
+    (13, 'GasGas', 'TXT 300', '66778', 2021),
+    (14, 'KTM', 'Super Duke R', '88990', 2022),
+    (15, 'KTM', '390 Adventure', '11121', 2023),
+    (16, 'Husqvarna', 'FE 350', '13141', 2020),
+    (17, 'Husqvarna', 'FS 450', '15161', 2022),
+    (18, 'GasGas', 'MC 125', '17181', 2023),
+    (19, 'GasGas', 'EC 250', '19191', 2020),
+    (20, 'KTM', '690 Enduro R', '20202', 2021);
+
