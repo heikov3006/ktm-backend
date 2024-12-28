@@ -124,3 +124,11 @@ Content-Type: application/json
   "serviceId": 2
 }
 
+###
+
+GET http://localhost:8080/maintenance/getServicesByBike
+Content-Type: application/json
+
+{
+  "bikeId": 2
+}
