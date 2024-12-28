@@ -13,8 +13,11 @@ public class UserBikeRepository implements PanacheRepository<BikeUser> {
         return getEntityManager().createQuery("select bu from BikeUser bu where bu.user.email like :email").setParameter("email", email).getResultList();
     }
 
-    public void deleteByEmail(Long id) {
-        getEntityManager().createQuery("delete from BikeUser bu where bu.user.id = :id").setParameter("id", id);
+    public BikeUser getBikeUserByMailAndBikeId(String email, Long bikeId){
+        return (BikeUser) getEntityManager().createQuery("select bu from BikeUser bu where bu.user.email like :email and bu.bike.id = :bikeId").setParameter("email", email).setParameter("bikeId", bikeId).getSingleResult();
     }
 
+    public void deleteByEmail(String email) {
+        getEntityManager().createQuery("delete from BikeUser bu where bu.user.email = :email").setParameter("email", email).executeUpdate();
+    }
 }

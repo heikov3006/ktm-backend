@@ -139,7 +139,7 @@ public class UserResource {
             return Response.accepted("exception during verifying user").build();
         }
         if (isVerified) {
-            userBikeRepository.deleteByEmail(userToDelete.id);
+            userBikeRepository.deleteByEmail(userToDelete.getEmail());
             userRepository.delete(userToDelete);
             try {
                 HttpResponse<JsonNode> request = Unirest.post("https://api.mailgun.net/v3/sandboxe50a7d82c26c4fed88697d548556ced8.mailgun.org/messages")
@@ -165,7 +165,7 @@ public class UserResource {
         User user = userRepository.getUserByEmail(addBikeDTO.email());
         Bike bike = bikeRepository.findById(addBikeDTO.bikeId());
         if (user != null && bike != null) {
-            BikeUser bikeUser = new BikeUser(user, bike, addBikeDTO.km());
+            BikeUser bikeUser = new BikeUser(addBikeDTO.bikeId().toString(), user, bike, addBikeDTO.km());
             userBikeRepository.persist(bikeUser);
             return Response.ok(getUserBikeDTO(user)).build();
         }
@@ -180,8 +180,7 @@ public class UserResource {
         User user = userRepository.getUserByEmail(addBikeDTO.email());
         Bike bike = bikeRepository.findById(addBikeDTO.bikeId());
         if (user != null && bike != null) {
-            user.persist();
-            bike.persist();
+            userBikeRepository.deleteByEmail(addBikeDTO.email());
         }
         return user;
     }

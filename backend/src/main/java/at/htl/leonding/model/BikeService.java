@@ -8,8 +8,6 @@ import jakarta.persistence.ManyToOne;
 public class BikeService extends PanacheEntity {
     String title;
     int interval;
-    String text;
-    String details;
     @ManyToOne
     Bike bike;
 
@@ -19,22 +17,6 @@ public class BikeService extends PanacheEntity {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public String getDetails() {
-        return details;
-    }
-
-    public void setDetails(String details) {
-        this.details = details;
     }
 
     public Bike getBike() {

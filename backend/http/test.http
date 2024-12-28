@@ -87,3 +87,40 @@ Content-Type: application/json
   "email": "heiko.v3006@gmail.com",
   "bikeId": 1
 }
+
+###
+
+POST http://localhost:8080/maintenance/addServiceHistory
+Content-Type: application/json
+
+{
+  "email": "heiko.v3006@gmail.com",
+  "bikeId": 1,
+  "serviceId": 2,
+  "km": 8000
+}
+
+###
+
+//Gesamte Historie eines Bikes für ein bestimmtes Service
+GET http://localhost:8080/maintenance/getBikeserviceHistory
+Content-Type: application/json
+
+{
+  "email": "heiko.v3006@gmail.com",
+  "bikeId": 1,
+  "serviceId": 2
+}
+
+###
+
+//letzter Serviceeintrag für ein spezifisches Bike und spezifisches Service
+GET http://localhost:8080/maintenance/getBikeserviceHistory/last
+Content-Type: application/json
+
+{
+  "email": "heiko.v3006@gmail.com",
+  "bikeId": 1,
+  "serviceId": 2
+}
+
