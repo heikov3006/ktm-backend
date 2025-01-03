@@ -11,10 +11,7 @@ import at.htl.leonding.sec.Encryption;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -171,6 +168,19 @@ public class UserResource {
         }
         return Response.ok(user).build();
     }
+
+    @GET
+    @Path("getUserBikes")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getUserBikes(@QueryParam("email") String email) {
+        User user = userRepository.getUserByEmail(email);
+        if (user == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity("User not found").build();
+        }
+        UserBikeDTO userBikeDTO = getUserBikeDTO(user);
+        return Response.ok(userBikeDTO).build();
+    }
+
 
     @POST
     @Path("deleteBikeFromUser")
