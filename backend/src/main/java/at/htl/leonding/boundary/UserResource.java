@@ -11,7 +11,10 @@ import at.htl.leonding.sec.Encryption;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.*;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -55,7 +58,7 @@ public class UserResource {
             } else {
                 try {
                     String hashedPassword = Encryption.generateSaltedHash(userCreationDTO.password().toCharArray());
-                    User user = new User(userCreationDTO.firstName(), userCreationDTO.lastName(), userCreationDTO.email(), hashedPassword);
+                    User user = new User(userCreationDTO.firstname(), userCreationDTO.lastname(), userCreationDTO.email(), hashedPassword);
                     userRepository.persist(user);
                     return Response.ok(getUserBikeDTO(user)).build();
                 } catch (Exception ex) {
@@ -162,42 +165,34 @@ public class UserResource {
         User user = userRepository.getUserByEmail(addBikeDTO.email());
         Bike bike = bikeRepository.findById(addBikeDTO.bikeId());
         if (user != null && bike != null) {
-            BikeUser bikeUser = new BikeUser(addBikeDTO.bikeId().toString(), user, bike, addBikeDTO.km());
-            userBikeRepository.persist(bikeUser);
-            return Response.ok(getUserBikeDTO(user)).build();
+            try {
+                BikeUser bikeUser = new BikeUser(addBikeDTO.fin(), user, bike, addBikeDTO.km(), addBikeDTO.imgUrl());
+                userBikeRepository.persist(bikeUser);
+                return Response.ok(getUserBikeDTO(user)).build();
+            } catch (Exception ex) {
+                return Response.accepted("Bike with this FIN is already used").build();
+            }
         }
         return Response.ok(user).build();
     }
-
-    @GET
-    @Path("getUserBikes")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response getUserBikes(@QueryParam("email") String email) {
-        User user = userRepository.getUserByEmail(email);
-        if (user == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity("User not found").build();
-        }
-        UserBikeDTO userBikeDTO = getUserBikeDTO(user);
-        return Response.ok(userBikeDTO).build();
-    }
-
 
     @POST
     @Path("deleteBikeFromUser")
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
-    public User deleteBikeFromUser(AddBikeDTO addBikeDTO) {
+    public Response deleteBikeFromUser(AddBikeDTO addBikeDTO) {
         User user = userRepository.getUserByEmail(addBikeDTO.email());
         Bike bike = bikeRepository.findById(addBikeDTO.bikeId());
         if (user != null && bike != null) {
-            userBikeRepository.deleteByEmail(addBikeDTO.email());
+            userBikeRepository.deleteByEmailAndFin(addBikeDTO.email(), addBikeDTO.fin());
+            return Response.ok(getUserBikeDTO(user)).build();
         }
-        return user;
+        return Response.accepted("No such user or bike").build();
     }
 
     private UserBikeDTO getUserBikeDTO(User user){
         List<BikeUser> bikeUserList = userBikeRepository.getBikeUserByEmail(user.getEmail());
-        Stream<BikeDTO> bikeDTOList = bikeUserList.stream().map(bikeUserTemp -> {return new BikeDTO(bikeUserTemp.getBike(), bikeUserTemp.getKm());});
+        Stream<BikeDTO> bikeDTOList = bikeUserList.stream().map(bikeUserTemp -> {return new BikeDTO(bikeUserTemp.getBike(), bikeUserTemp.getKm(), bikeUserTemp.getFin());});
         return new UserBikeDTO(user, bikeDTOList.toList());
     }
 }

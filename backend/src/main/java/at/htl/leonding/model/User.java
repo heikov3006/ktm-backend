@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "USERS")
+@Table(name = "USERS", uniqueConstraints = {
+        @jakarta.persistence.UniqueConstraint(columnNames = "email")
+})
 public class User extends PanacheEntity {
 
     @Column(unique = true)

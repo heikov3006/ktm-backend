@@ -8,9 +8,8 @@ import at.htl.leonding.repository.BikeserviceHistoryRepository;
 import at.htl.leonding.repository.UserBikeRepository;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.time.LocalDate;
@@ -30,25 +29,28 @@ public class BikeResource {
 
     @Path("getBikeserviceHistory")
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getBikeserviceHistory(BikeHistoryDTO bikeHistoryDTO) {
         return Response.ok(
-                bshrepo.findByBikeUserAndService(bikeHistoryDTO.email(), bikeHistoryDTO.bikeId(), bikeHistoryDTO.serviceId())
+                bshrepo.findByBikeUserAndService(bikeHistoryDTO.email(), bikeHistoryDTO.fin(), bikeHistoryDTO.serviceId())
         ).build();
     }
 
     @Path("getBikeserviceHistory/last")
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getLastBikeserviceHistory(BikeHistoryDTO bikeHistoryDTO) {
-        List<BikeserviceHistory> returnList = bshrepo.findByBikeUserAndService(bikeHistoryDTO.email(), bikeHistoryDTO.bikeId(), bikeHistoryDTO.serviceId());
+        List<BikeserviceHistory> returnList = bshrepo.findByBikeUserAndService(bikeHistoryDTO.email(), bikeHistoryDTO.fin(), bikeHistoryDTO.serviceId());
         return Response.ok(returnList.getLast()).build();
     }
 
     @Path("addServiceHistory")
     @POST
     @Transactional
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response addServiceHistory(AddServiceHistoryDTO addServiceHistoryDTO) {
         BikeserviceHistory bikeserviceHistory = new BikeserviceHistory();
-        bikeserviceHistory.setBikeUser(ubrepo.getBikeUserByMailAndBikeId(addServiceHistoryDTO.email(), addServiceHistoryDTO.bikeId()));
+        bikeserviceHistory.setBikeUser(ubrepo.getBikeUserByMailAndFin(addServiceHistoryDTO.email(), addServiceHistoryDTO.fin()));
         bikeserviceHistory.setService(bsrepo.findById(addServiceHistoryDTO.serviceId()));
         bikeserviceHistory.setServiceDate(LocalDate.now());
         bikeserviceHistory.setKilometersAtService(addServiceHistoryDTO.km());

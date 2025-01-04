@@ -73,9 +73,10 @@ POST http://localhost:8080/maintenance/addBike
 Content-Type: application/json
 
 {
+  "fin": "JHASHDJJSHD",
   "email": "heiko.v3006@gmail.com",
   "bikeId": 1,
-  "km": 1000
+  "km": 30000
 }
 
 ###
@@ -85,7 +86,8 @@ Content-Type: application/json
 
 {
   "email": "heiko.v3006@gmail.com",
-  "bikeId": 1
+  "bikeId": 1,
+  "fin": "JHASHDJJSHD"
 }
 
 ###
@@ -95,7 +97,7 @@ Content-Type: application/json
 
 {
   "email": "heiko.v3006@gmail.com",
-  "bikeId": 1,
+  "fin": "JHASHDJJSHD",
   "serviceId": 2,
   "km": 8000
 }
@@ -108,8 +110,8 @@ Content-Type: application/json
 
 {
   "email": "heiko.v3006@gmail.com",
-  "bikeId": 1,
-  "serviceId": 2
+  "fin": "JHASHDJJSHD",
+  "serviceId": 1
 }
 
 ###
@@ -120,8 +122,8 @@ Content-Type: application/json
 
 {
   "email": "heiko.v3006@gmail.com",
-  "bikeId": 1,
-  "serviceId": 2
+  "fin": "JHASHDJJSHD",
+  "serviceId": 1
 }
 
 ###
@@ -131,4 +133,14 @@ Content-Type: application/json
 
 {
   "bikeId": 2
+}
+
+###
+
+GET http://localhost:8080/maintenance/getServiceListForSpecificBike
+Content-Type: application/json
+
+{
+  "email": "heiko.v3006@gmail.com",
+  "fin": "JHASHDJJSHD"
 }

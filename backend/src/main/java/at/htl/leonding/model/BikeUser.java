@@ -20,13 +20,15 @@ public class BikeUser extends PanacheEntityBase {
     @JoinColumn(name = "bikeid", nullable = false)
     private Bike bike;
 
-    Long km;
+    private Long km;
+    private String imgUrl;
 
-    public BikeUser(String fin, User user, Bike bike, Long km) {
+    public BikeUser(String fin, User user, Bike bike, Long km, String imgUrl) {
         setUser(user);
         setBike(bike);
         setKm(km);
         setFin(fin);
+        setImgUrl(imgUrl);
     }
 
     public BikeUser() {
@@ -62,5 +64,13 @@ public class BikeUser extends PanacheEntityBase {
 
     public void setFin(String fin) {
         this.fin = fin;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }
