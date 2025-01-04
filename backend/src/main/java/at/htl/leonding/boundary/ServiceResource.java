@@ -1,9 +1,6 @@
 package at.htl.leonding.boundary;
 
-import at.htl.leonding.dto.BikeDTO;
-import at.htl.leonding.dto.BikeServiceDTO;
-import at.htl.leonding.dto.GetServiceByBikeDTO;
-import at.htl.leonding.dto.ServiceForBikeDTO;
+import at.htl.leonding.dto.*;
 import at.htl.leonding.model.BikeService;
 import at.htl.leonding.model.BikeUser;
 import at.htl.leonding.model.BikeserviceHistory;
@@ -42,8 +39,15 @@ public class ServiceResource {
     @GET
     @Path("getServicesByBike")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getServiceByBike(GetServiceByBikeDTO getServiceByBikeDTO){
-        return Response.ok(bsrepo.getServicesByBikeId(getServiceByBikeDTO.bikeId())).build();
+    public Response getServiceByBike(GetServiceByBikeIdDTO getServiceByBikeDTO){
+        List<BikeService> bikeServiceList = bsrepo.getServicesByBikeId(getServiceByBikeDTO.bikeId());
+        List<ServiceByBikeDTO> dtoList = bikeServiceList.stream().map(bikeService -> {
+            String title = bikeService.getTitle();
+            int interval = bikeService.getInterval();
+            Long serviceId = bikeService.getId();
+            return new ServiceByBikeDTO(title, interval, serviceId);
+        }).toList();
+        return Response.ok(new GetServiceByBikeDTO(bikeServiceList.get(0).getBike(), dtoList)).build();
     }
 
     @GET
@@ -62,7 +66,7 @@ public class ServiceResource {
                 Long actualKm = bikeserviceHistory.bikeUser.getKm();
                 return new BikeServiceDTO(title, interval, serviceId, kilometersAtService, actualKm);
             }).toList();
-            return Response.ok(bikeServices).build();
+            return Response.ok(new GetServiceListForSpecificBikeDTO(bikeServiceList, bikeServices)).build();
         } else {
             return Response.ok().build();
         }

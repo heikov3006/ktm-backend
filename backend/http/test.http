@@ -76,7 +76,8 @@ Content-Type: application/json
   "fin": "JHASHDJJSHD",
   "email": "heiko.v3006@gmail.com",
   "bikeId": 1,
-  "km": 30000
+  "km": 30000,
+  "imgUrl": "https://www.google.com"
 }
 
 ###
@@ -98,8 +99,8 @@ Content-Type: application/json
 {
   "email": "heiko.v3006@gmail.com",
   "fin": "JHASHDJJSHD",
-  "serviceId": 2,
-  "km": 8000
+  "serviceId": 1,
+  "km": 9000
 }
 
 ###

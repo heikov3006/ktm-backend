@@ -192,7 +192,7 @@ public class UserResource {
 
     private UserBikeDTO getUserBikeDTO(User user){
         List<BikeUser> bikeUserList = userBikeRepository.getBikeUserByEmail(user.getEmail());
-        Stream<BikeDTO> bikeDTOList = bikeUserList.stream().map(bikeUserTemp -> {return new BikeDTO(bikeUserTemp.getBike(), bikeUserTemp.getKm(), bikeUserTemp.getFin());});
+        Stream<BikeDTO> bikeDTOList = bikeUserList.stream().map(bikeUserTemp -> {return new BikeDTO(bikeUserTemp.getBike(), bikeUserTemp.getKm(), bikeUserTemp.getFin(), bikeUserTemp.getImgUrl());});
         return new UserBikeDTO(user, bikeDTOList.toList());
     }
 }
