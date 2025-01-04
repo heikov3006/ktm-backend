@@ -55,9 +55,9 @@ public class UserResource {
             } else {
                 try {
                     String hashedPassword = Encryption.generateSaltedHash(userCreationDTO.password().toCharArray());
-                    User user = new User(userCreationDTO.firstname(), userCreationDTO.lastname(), userCreationDTO.email(), hashedPassword);
+                    User user = new User(userCreationDTO.firstName(), userCreationDTO.lastName(), userCreationDTO.email(), hashedPassword);
                     userRepository.persist(user);
-                    return Response.ok(user).build();
+                    return Response.ok(getUserBikeDTO(user)).build();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
