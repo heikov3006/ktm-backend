@@ -7,11 +7,11 @@ import java.time.LocalDate;
 @Entity
 public class BikeserviceHistory extends PanacheEntity {
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "userBikeId", nullable = false)
     public BikeUser bikeUser;  // Verknüpfung zur BikeUser-Tabelle
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "serviceId", nullable = false)
     public BikeService service; // Verknüpfung zur BikeService-Tabelle
 

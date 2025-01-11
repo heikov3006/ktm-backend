@@ -1,14 +1,8 @@
 package at.htl.leonding.boundary;
 
 import at.htl.leonding.dto.*;
-import at.htl.leonding.model.BikeService;
-import at.htl.leonding.model.BikeUser;
-import at.htl.leonding.model.BikeserviceHistory;
-import at.htl.leonding.model.User;
-import at.htl.leonding.repository.BikeServiceRepository;
-import at.htl.leonding.repository.BikeserviceHistoryRepository;
-import at.htl.leonding.repository.UserBikeRepository;
-import at.htl.leonding.repository.UserRepository;
+import at.htl.leonding.model.*;
+import at.htl.leonding.repository.*;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -31,6 +25,9 @@ public class ServiceResource {
     UserBikeRepository userBikeRepository;
 
     @Inject
+    BikeRepository bikeRepository;
+
+    @Inject
     BikeServiceRepository bikeServiceRepository;
 
     @Inject
@@ -47,7 +44,8 @@ public class ServiceResource {
             Long serviceId = bikeService.getId();
             return new ServiceByBikeDTO(title, interval, serviceId);
         }).toList();
-        return Response.ok(new GetServiceByBikeDTO(bikeServiceList.get(0).getBike(), dtoList)).build();
+        Bike bike = bikeRepository.findById(getServiceByBikeDTO.bikeId());
+        return Response.ok(new GetServiceByBikeDTO(bike, dtoList)).build();
     }
 
     @GET

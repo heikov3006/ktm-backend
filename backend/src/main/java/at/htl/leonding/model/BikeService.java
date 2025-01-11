@@ -1,26 +1,24 @@
 package at.htl.leonding.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class BikeService extends PanacheEntityBase {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bikeService_seq")
-    @SequenceGenerator(
-            name = "bikeService_seq",
-            sequenceName = "bikeService_sequence",
-            initialValue = 1000, // Startwert
-            allocationSize = 1   // Inkrementgröße
-    )
     Long id;
 
     String title;
     int interval;
-    @ManyToOne
-    Bike bike;
+    //@ManyToMany(mappedBy = "services")
+    //private List<Bike> bikes = new ArrayList<>();
 
     public String getTitle() {
         return title;
@@ -30,13 +28,13 @@ public class BikeService extends PanacheEntityBase {
         this.title = title;
     }
 
-    public Bike getBike() {
-        return bike;
+    /*public List<Bike> getBike() {
+        return bikes;
     }
 
-    public void setBike(Bike bike) {
-        this.bike = bike;
-    }
+    public void setBike(List<Bike> bike) {
+        this.bikes = bike;
+    }*/
 
     public int getInterval() {
         return interval;
@@ -48,5 +46,9 @@ public class BikeService extends PanacheEntityBase {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

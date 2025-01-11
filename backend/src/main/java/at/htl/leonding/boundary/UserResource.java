@@ -5,13 +5,17 @@ import at.htl.leonding.model.Bike;
 import at.htl.leonding.model.BikeUser;
 import at.htl.leonding.model.User;
 import at.htl.leonding.repository.BikeRepository;
+import at.htl.leonding.repository.BikeserviceHistoryRepository;
 import at.htl.leonding.repository.UserBikeRepository;
 import at.htl.leonding.repository.UserRepository;
 import at.htl.leonding.sec.Encryption;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.*;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -37,22 +41,12 @@ public class UserResource {
     BikeRepository bikeRepository;
     @Inject
     UserBikeRepository userBikeRepository;
+    @Inject
+    BikeserviceHistoryRepository bikeserviceHistoryRepository;
 
     @GET
     public List<User> all() {
         return userRepository.findAll().list();
-    }
-
-    @GET
-    @Path("getUserBikes")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response getUserBikes(@QueryParam("email") String email) {
-        User user = userRepository.getUserByEmail(email);
-        if (user == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity("User not found").build();
-        }
-        UserBikeDTO userBikeDTO = getUserBikeDTO(user);
-        return Response.ok(userBikeDTO).build();
     }
 
     @POST
@@ -67,7 +61,7 @@ public class UserResource {
             } else {
                 try {
                     String hashedPassword = Encryption.generateSaltedHash(userCreationDTO.password().toCharArray());
-                    User user = new User(userCreationDTO.firstName(), userCreationDTO.lastName(), userCreationDTO.email(), hashedPassword);
+                    User user = new User(userCreationDTO.firstname(), userCreationDTO.lastname(), userCreationDTO.email(), hashedPassword);
                     userRepository.persist(user);
                     return Response.ok(getUserBikeDTO(user)).build();
                 } catch (Exception ex) {
@@ -148,8 +142,13 @@ public class UserResource {
             return Response.accepted("exception during verifying user").build();
         }
         if (isVerified) {
+            List<BikeUser> bikeUsers = userBikeRepository.getBikeUserByEmail(userToDelete.getEmail());
+            bikeUsers.forEach(bikeUser -> {
+                System.out.println(bikeUser.toString());
+                bikeserviceHistoryRepository.deleteByFin(bikeUser.getFin());
+            });
             userBikeRepository.deleteByEmail(userToDelete.getEmail());
-            userRepository.delete(userToDelete);
+            userRepository.deleteByEmail(userToDelete.getEmail());
             try {
                 HttpResponse<JsonNode> request = Unirest.post("https://api.mailgun.net/v3/sandboxe50a7d82c26c4fed88697d548556ced8.mailgun.org/messages")
                         .basicAuth("api", MAILGUN_API_KEY)
@@ -193,6 +192,7 @@ public class UserResource {
         User user = userRepository.getUserByEmail(addBikeDTO.email());
         Bike bike = bikeRepository.findById(addBikeDTO.bikeId());
         if (user != null && bike != null) {
+            bikeserviceHistoryRepository.deleteByFin(addBikeDTO.fin());
             userBikeRepository.deleteByEmailAndFin(addBikeDTO.email(), addBikeDTO.fin());
             return Response.ok(getUserBikeDTO(user)).build();
         }

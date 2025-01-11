@@ -73,4 +73,15 @@ public class BikeUser extends PanacheEntityBase {
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
     }
+
+    @Override
+    public String toString() {
+        return "BikeUser{" +
+                "fin='" + fin + '\'' +
+                ", user=" + user +
+                ", bike=" + bike +
+                ", km=" + km +
+                ", imgUrl='" + imgUrl + '\'' +
+                '}';
+    }
 }

@@ -42,24 +42,31 @@ VALUES (1, 'KTM', 'Duke 390', '12345', 2021),
        (19, 'GasGas', 'EC 250', '19191', 2020),
        (20, 'KTM', '690 Enduro R', '20202', 2021);
 
-INSERT INTO BikeService (id, bike_id, title, interval)
-VALUES (1,1, 'Kette spannen', 500),
-       (2,1, 'Reifen prüfen', 1000),
-       (3,1, 'Bremsbeläge tauschen', 2000),
-       (4,1, 'Schaltung einstellen', 1500),
-       (5,2, 'Motoröl wechseln', 3000),
-       (6,2, 'Zündkerzen prüfen', 5000),
-       (7,2, 'Luftfilter reinigen', 4000),
-       (8,2, 'Bremsen entlüften', 6000),
-       (9,3, 'Lichtanlage prüfen', 1200),
-       (10,3, 'Lenker justieren', 800),
-       (11,3, 'Rahmen reinigen', 3000),
-       (12,3, 'Kette schmieren', 700),
-       (13,4, 'Speichen nachziehen', 2500),
-       (14,4, 'Stoßdämpfer prüfen', 5000),
-       (15,4, 'Fahrradcomputer updaten', 10000),
-       (16,4, 'Radlager schmieren', 4500),
-       (17,5, 'Pedale einstellen', 1000),
-       (18,5, 'Sattel überprüfen', 800),
-       (19,5, 'Gabel inspizieren', 4000),
-       (20,5, 'Luftdruck messen', 500);
+INSERT INTO BikeService (id, title, interval)
+VALUES (1, 'Kette spannen', 500),
+       (2, 'Reifen prüfen', 1000),
+       (3, 'Bremsbeläge tauschen', 2000),
+       (4, 'Schaltung einstellen', 1500),
+       (5, 'Motoröl wechseln', 3000),
+       (6, 'Zündkerzen prüfen', 5000),
+       (7, 'Luftfilter reinigen', 4000),
+       (8, 'Bremsen entlüften', 6000),
+       (9, 'Lichtanlage prüfen', 1200),
+       (10, 'Lenker justieren', 800),
+       (11, 'Rahmen reinigen', 3000),
+       (12, 'Kette schmieren', 700),
+       (13, 'Speichen nachziehen', 2500),
+       (14, 'Stoßdämpfer prüfen', 5000),
+       (15, 'Fahrradcomputer updaten', 10000),
+       (16, 'Radlager schmieren', 4500),
+       (17,'Pedale einstellen', 1000),
+       (18,'Sattel überprüfen', 800),
+       (19,'Gabel inspizieren', 4000),
+       (20, 'Luftdruck messen', 500);
+
+insert into bike_service (bike_id, service_id)
+values (1, 1),
+       (2,1),
+       (1,2),
+       (2,1);
+

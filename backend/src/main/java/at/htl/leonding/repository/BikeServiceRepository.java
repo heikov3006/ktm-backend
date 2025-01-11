@@ -9,6 +9,6 @@ import java.util.List;
 @ApplicationScoped
 public class BikeServiceRepository implements PanacheRepository<BikeService> {
     public List<BikeService> getServicesByBikeId(Long bikeId) {
-        return getEntityManager().createQuery("select bs from BikeService bs where bike.id = :bikeId").setParameter("bikeId", bikeId).getResultList();
+        return getEntityManager().createQuery("select b.services from Bike b where b.id = :bikeId").setParameter("bikeId", bikeId).getResultList();
     }
 }

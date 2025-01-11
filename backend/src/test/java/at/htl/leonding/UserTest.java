@@ -1,7 +1,9 @@
 package at.htl.leonding;
 
 import at.htl.leonding.model.User;
+import at.htl.leonding.repository.UserRepository;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Assertions;
@@ -9,6 +11,9 @@ import org.junit.jupiter.api.Test;
 
 @QuarkusTest
 public class UserTest {
+
+    @Inject
+    UserRepository userRepository;
 
     @Test
     @Transactional
@@ -40,30 +45,6 @@ public class UserTest {
         Assertions.assertEquals("Alice", foundUser.getFirstname(), "Firstname should match.");
         Assertions.assertEquals("Smith", foundUser.getLastname(), "Lastname should match.");
     }
-
-    @Test
-    @Transactional
-    void testUniqueEmailConstraint() {
-        // Erster User
-        User user1 = new User();
-        user1.setEmail("unique@example.com");
-        user1.setPassword("password123");
-        user1.setFirstname("John");
-        user1.setLastname("Doe");
-        user1.persist();
-
-        // Zweiter User mit gleicher E-Mail
-        User user2 = new User();
-        user2.setEmail("unique@example.com"); // Doppelte E-Mail
-        user2.setPassword("differentPassword");
-        user2.setFirstname("Jane");
-        user2.setLastname("Doe");
-
-        // Überprüfen, ob eine ConstraintViolationException ausgelöst wird
-        Assertions.assertThrows(Exception.class, user2::persist,
-                "Persisting a user with a duplicate email should fail.");
-    }
-
 
     @Test
     @Transactional

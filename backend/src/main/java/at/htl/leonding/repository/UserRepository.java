@@ -36,4 +36,8 @@ public class UserRepository implements PanacheRepository<User> {
         }
         return null;
     }
+
+    public void deleteByEmail(String email) {
+        getEntityManager().createQuery("delete from User u where u.email = :email").setParameter("email", email).executeUpdate();
+    }
 }

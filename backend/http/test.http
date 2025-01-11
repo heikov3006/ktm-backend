@@ -100,7 +100,7 @@ Content-Type: application/json
   "email": "heiko.v3006@gmail.com",
   "fin": "JHASHDJJSHD",
   "serviceId": 1,
-  "km": 9000
+  "km": 8000
 }
 
 ###
@@ -124,7 +124,7 @@ Content-Type: application/json
 {
   "email": "heiko.v3006@gmail.com",
   "fin": "JHASHDJJSHD",
-  "serviceId": 1
+  "serviceId": 25
 }
 
 ###
@@ -133,7 +133,7 @@ GET http://localhost:8080/maintenance/getServicesByBike
 Content-Type: application/json
 
 {
-  "bikeId": 2
+  "bikeId": 32
 }
 
 ###

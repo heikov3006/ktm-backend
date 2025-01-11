@@ -1,5 +1,6 @@
 package at.htl.leonding.repository;
 
+import at.htl.leonding.model.Bike;
 import at.htl.leonding.model.BikeUser;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
