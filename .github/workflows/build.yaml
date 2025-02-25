@@ -29,7 +29,6 @@ jobs:
       - name: build backend
         run: |
           chmod +x ./build.sh
-          |
           ./build.sh
         working-directory: backend
 
