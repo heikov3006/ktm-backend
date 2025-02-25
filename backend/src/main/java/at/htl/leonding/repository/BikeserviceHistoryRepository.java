@@ -34,7 +34,11 @@ public class BikeserviceHistoryRepository implements PanacheRepository<Bikeservi
         return null;
     }
 
-    public void deleteByFin(String fin) {
-        getEntityManager().createQuery("delete from BikeserviceHistory bsh where bikeUser.fin = :fin").setParameter("fin", fin).executeUpdate();
+    public List<BikeserviceHistory> getByFin(String fin) {
+        return getEntityManager().createQuery("select bsh from BikeserviceHistory bsh where bsh.fin = :fin").setParameter("fin", fin).getResultList();
+    }
+
+    public void deleteEmail(String email) {
+        getEntityManager().createQuery("update BikeserviceHistory bsh set bikeUser = null where bikeUser.user.email = :email").setParameter("email", email).executeUpdate();
     }
 }

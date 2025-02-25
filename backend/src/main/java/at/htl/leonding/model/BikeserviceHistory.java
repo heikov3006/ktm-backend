@@ -7,9 +7,11 @@ import java.time.LocalDate;
 @Entity
 public class BikeserviceHistory extends PanacheEntity {
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name = "userBikeId", nullable = false)
+    @ManyToOne()
+    @JoinColumn(name = "userBikeId")
     public BikeUser bikeUser;  // Verknüpfung zur BikeUser-Tabelle
+
+    String fin;
 
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "serviceId", nullable = false)
@@ -78,5 +80,13 @@ public class BikeserviceHistory extends PanacheEntity {
 
     public void setUpdatedAt(LocalDate updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getFin() {
+        return fin;
+    }
+
+    public void setFin(String fin) {
+        this.fin = fin;
     }
 }

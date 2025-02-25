@@ -11,6 +11,10 @@ import at.htl.leonding.repository.BikeRepository;
 import at.htl.leonding.repository.BikeServiceRepository;
 import at.htl.leonding.repository.BikeserviceHistoryRepository;
 import at.htl.leonding.repository.UserBikeRepository;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
@@ -22,6 +26,8 @@ import java.util.List;
 
 @Path("maintenance")
 public class BikeResource {
+
+    private final String MAILGUN_API_KEY = "9ac534cff650651e7c46731ecd838553-0920befd-d0f16de6";
 
     @Inject
     BikeserviceHistoryRepository bshrepo;
@@ -55,6 +61,17 @@ public class BikeResource {
         return Response.ok(returnList.getLast()).build();
     }
 
+    @Path("getBikeserviceHistory/fin/{fin}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getBikeServiceHistoryByFin(@PathParam("fin") String fin) {
+        List<BikeserviceHistory> returnList = bshrepo.getByFin(fin);
+        if (returnList.isEmpty()) {
+            return Response.status(Response.Status.NOT_FOUND).entity("No history found").build();
+        }
+        return Response.ok(returnList.getLast()).build();
+    }
+
     @Path("addServiceHistory")
     @POST
     @Transactional
@@ -78,10 +95,22 @@ public class BikeResource {
 
         // Erstelle den History-Eintrag
         bikeserviceHistory.setService(service); // Setze das Service
+        bikeserviceHistory.setFin(bikeUser.getFin()); // Setze die FIN
 
         // Speichere die Historie
         bshrepo.persist(bikeserviceHistory);
 
-        return Response.ok("History added").build();
+        try {
+            HttpResponse<JsonNode> request = Unirest.post("https://api.mailgun.net/v3/sandboxe50a7d82c26c4fed88697d548556ced8.mailgun.org/messages")
+                    .basicAuth("api", MAILGUN_API_KEY)
+                    .queryString("from", "KTM MAINTENANCE <maintenance@ktm.com>")
+                    .queryString("to", bikeUser.getUser().getEmail())
+                    .queryString("subject", "Service " + service.getTitle() + " for your " + bike.getBrand() + ' ' + bike.getModel())
+                    .queryString("text", "The service " + service.getTitle() + " for your " + bike.getBrand() + ' ' + bike.getModel() + " has been added to your history. You had " + bikeserviceHistory.getKilometersAtService() + " km at this time.")
+                    .asJson();
+            return Response.ok("History added").build();
+        } catch (UnirestException ex) {
+            return Response.accepted("exception sending email").build();
+        }
     }
 }

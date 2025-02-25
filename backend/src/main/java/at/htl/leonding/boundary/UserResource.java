@@ -56,14 +56,24 @@ public class UserResource {
     public Response register(UserCreationDTO userCreationDTO) {
         if (!userRepository.userWithEmailAlreadyExisting(userCreationDTO.email())) {
             if (!userCreationDTO.password().equals(userCreationDTO.passwordConfirm())) {
-                User user;
                 return Response.status(450, "Passwords do not match").build();
             } else {
                 try {
                     String hashedPassword = Encryption.generateSaltedHash(userCreationDTO.password().toCharArray());
                     User user = new User(userCreationDTO.firstname(), userCreationDTO.lastname(), userCreationDTO.email(), hashedPassword);
                     userRepository.persist(user);
-                    return Response.ok(getUserBikeDTO(user)).build();
+                    try {
+                        HttpResponse<JsonNode> request = Unirest.post("https://api.mailgun.net/v3/sandboxe50a7d82c26c4fed88697d548556ced8.mailgun.org/messages")
+                                .basicAuth("api", MAILGUN_API_KEY)
+                                .queryString("from", "KTM MAINTENANCE <maintenance@ktm.com>")
+                                .queryString("to", user.getEmail())
+                                .queryString("subject", "Registration successful")
+                                .queryString("text", "You have successfully registered to KTM Maintenance!")
+                                .asJson();
+                        return Response.ok(getUserBikeDTO(user)).build();
+                    } catch (UnirestException ex) {
+                        return Response.accepted("exception sending email").build();
+                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -119,7 +129,18 @@ public class UserResource {
                     return Response.ok("failed generating salted hash password").status(300).build();
                 }
                 User updatedUser = userRepository.updateUser(userEditingDTO.email(), userEditingDTO.user());
-                return Response.ok(updatedUser).build();
+                try {
+                    HttpResponse<JsonNode> request = Unirest.post("https://api.mailgun.net/v3/sandboxe50a7d82c26c4fed88697d548556ced8.mailgun.org/messages")
+                            .basicAuth("api", MAILGUN_API_KEY)
+                            .queryString("from", "KTM MAINTENANCE <maintenance@ktm.com>")
+                            .queryString("to", user.getEmail())
+                            .queryString("subject", "Profile updated")
+                            .queryString("text", "Your profile has been updated successfully!")
+                            .asJson();
+                    return Response.ok(updatedUser).build();
+                } catch (UnirestException ex) {
+                    return Response.accepted("exception sending email").build();
+                }
             } else {
                 return Response.status(498, "Wrong password").build();
             }
@@ -145,7 +166,7 @@ public class UserResource {
             List<BikeUser> bikeUsers = userBikeRepository.getBikeUserByEmail(userToDelete.getEmail());
             bikeUsers.forEach(bikeUser -> {
                 System.out.println(bikeUser.toString());
-                bikeserviceHistoryRepository.deleteByFin(bikeUser.getFin());
+                bikeserviceHistoryRepository.deleteEmail(bikeUser.getUser().getEmail());
             });
             userBikeRepository.deleteByEmail(userToDelete.getEmail());
             userRepository.deleteByEmail(userToDelete.getEmail());
@@ -176,12 +197,24 @@ public class UserResource {
             try {
                 BikeUser bikeUser = new BikeUser(addBikeDTO.fin(), user, bike, addBikeDTO.km(), addBikeDTO.imgUrl());
                 userBikeRepository.persist(bikeUser);
-                return Response.ok(getUserBikeDTO(user)).build();
+                try {
+                    HttpResponse<JsonNode> request = Unirest.post("https://api.mailgun.net/v3/sandboxe50a7d82c26c4fed88697d548556ced8.mailgun.org/messages")
+                            .basicAuth("api", MAILGUN_API_KEY)
+                            .queryString("from", "KTM MAINTENANCE <maintenance@ktm.com>")
+                            .queryString("to", user.getEmail())
+                            .queryString("subject", "Bike added")
+                            .queryString("text", "Bike " + bike.getBrand() + ' ' + bike.getModel() + " with FIN " + addBikeDTO.fin() + " has been added to your account!")
+                            .asJson();
+                    return Response.ok(getUserBikeDTO(user)).build();
+                } catch (UnirestException ex) {
+                    return Response.accepted("exception sending email").build();
+                }
             } catch (Exception ex) {
                 return Response.accepted("Bike with this FIN is already used").build();
             }
+        } else {
+            return Response.accepted("No such user or bike").build();
         }
-        return Response.ok(user).build();
     }
 
     @POST
@@ -192,9 +225,20 @@ public class UserResource {
         User user = userRepository.getUserByEmail(addBikeDTO.email());
         Bike bike = bikeRepository.findById(addBikeDTO.bikeId());
         if (user != null && bike != null) {
-            bikeserviceHistoryRepository.deleteByFin(addBikeDTO.fin());
+            bikeserviceHistoryRepository.deleteEmail(addBikeDTO.email());
             userBikeRepository.deleteByEmailAndFin(addBikeDTO.email(), addBikeDTO.fin());
-            return Response.ok(getUserBikeDTO(user)).build();
+            try {
+                HttpResponse<JsonNode> request = Unirest.post("https://api.mailgun.net/v3/sandboxe50a7d82c26c4fed88697d548556ced8.mailgun.org/messages")
+                        .basicAuth("api", MAILGUN_API_KEY)
+                        .queryString("from", "KTM MAINTENANCE <maintenance@ktm.com>")
+                        .queryString("to", user.getEmail())
+                        .queryString("subject", "Bike deleted")
+                        .queryString("text", "Bike " + bike.getBrand() + ' ' + bike.getModel() + " with FIN " + addBikeDTO.fin() + " has been deleted from your account!")
+                        .asJson();
+                return Response.ok(getUserBikeDTO(user)).build();
+            } catch (UnirestException ex) {
+                return Response.accepted("exception sending email").build();
+            }
         }
         return Response.accepted("No such user or bike").build();
     }

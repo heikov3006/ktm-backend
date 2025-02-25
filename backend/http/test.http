@@ -133,7 +133,7 @@ GET http://localhost:8080/maintenance/getServicesByBike
 Content-Type: application/json
 
 {
-  "bikeId": 32
+  "bikeId": 1
 }
 
 ###
@@ -145,3 +145,7 @@ Content-Type: application/json
   "email": "heiko.v3006@gmail.com",
   "fin": "JHASHDJJSHD"
 }
+
+###
+
+GET http://localhost:8080/maintenance/getBikeserviceHistory/fin/JHASHDJJSHD
