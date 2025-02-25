@@ -1,4 +1,4 @@
-name: IPT/SYP Template
+name: KTM Maintenance
 run-name: Build Project 🚀
 on:
   push:
@@ -28,6 +28,8 @@ jobs:
 
       - name: build backend
         run: |
+          chmod +x ./build.sh
+          |
           ./build.sh
         working-directory: backend
 
