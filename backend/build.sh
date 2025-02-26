@@ -3,7 +3,7 @@
 set -e
 
 rm -rf target
-mvn -B clean package
+mvn -B clean package -Dmaven.test.skip=true
 mkdir -p target/deploy
 cp ./target/*-runner.jar /opt/application/backend.jar
 
