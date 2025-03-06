@@ -41,20 +41,20 @@ public class BikeResource {
     @Inject
     BikeRepository bikeRepository;
 
-    @Path("getBikeserviceHistory")
+    @Path("getBikeserviceHistory/{email}/{fin}/{serviceId}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBikeserviceHistory(BikeHistoryDTO bikeHistoryDTO) {
+    public Response getBikeserviceHistory(@PathParam("email") String email, @PathParam("fin") String fin, @PathParam("serviceId") Long serviceId) {
         return Response.ok(
-                 bshrepo.findByBikeUserAndService(bikeHistoryDTO.email(), bikeHistoryDTO.fin(), bikeHistoryDTO.serviceId())
+                 bshrepo.findByBikeUserAndService(email, fin, serviceId)
         ).build();
     }
 
-    @Path("getBikeserviceHistory/last")
+    @Path("getBikeserviceHistory/last/{email}/{fin}/{serviceId}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getLastBikeserviceHistory(BikeHistoryDTO bikeHistoryDTO) {
-        List<BikeUserAndServiceDTO> returnList = bshrepo.findByBikeUserAndService(bikeHistoryDTO.email(), bikeHistoryDTO.fin(), bikeHistoryDTO.serviceId());
+    public Response getLastBikeserviceHistory(@PathParam("email") String email, @PathParam("fin") String fin, @PathParam("serviceId") Long serviceId) {
+        List<BikeUserAndServiceDTO> returnList = bshrepo.findByBikeUserAndService(email, fin, serviceId);
         if (returnList.isEmpty()) {
             return Response.status(Response.Status.NOT_FOUND).entity("No history found").build();
         }

@@ -6,6 +6,7 @@ import at.htl.leonding.repository.*;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -34,27 +35,27 @@ public class ServiceResource {
     BikeserviceHistoryRepository bikeserviceHistoryRepository;
 
     @GET
-    @Path("getServicesByBike")
+    @Path("getServicesByBike/{bikeId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getServiceByBike(GetServiceByBikeIdDTO getServiceByBikeDTO){
-        List<BikeService> bikeServiceList = bsrepo.getServicesByBikeId(getServiceByBikeDTO.bikeId());
+    public Response getServiceByBike(@PathParam("bikeId") Long bikeId){
+        List<BikeService> bikeServiceList = bsrepo.getServicesByBikeId(bikeId);
         List<ServiceByBikeDTO> dtoList = bikeServiceList.stream().map(bikeService -> {
             String title = bikeService.getTitle();
             int interval = bikeService.getInterval();
             Long serviceId = bikeService.getId();
             return new ServiceByBikeDTO(title, interval, serviceId);
         }).toList();
-        Bike bike = bikeRepository.findById(getServiceByBikeDTO.bikeId());
+        Bike bike = bikeRepository.findById(bikeId);
         return Response.ok(new GetServiceByBikeDTO(bike, dtoList)).build();
     }
 
     @GET
-    @Path("getServiceListForSpecificBike")
+    @Path("getServiceListForSpecificBike/{email}/{fin}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getServiceListForSpecificBike(ServiceForBikeDTO serviceForBikeDTO){
-        BikeUser bikeUser = userBikeRepository.getBikeUserByMailAndFin(serviceForBikeDTO.email(), serviceForBikeDTO.fin());
+    public Response getServiceListForSpecificBike(@PathParam("email") String email, @PathParam("fin") String fin){
+        BikeUser bikeUser = userBikeRepository.getBikeUserByMailAndFin(email, fin);
         List<BikeService> bikeServiceList = bikeServiceRepository.getServicesByBikeId(bikeUser.getBike().getId());
-        List<BikeserviceHistory> bikeserviceHistories = bikeserviceHistoryRepository.findByEmailAndFin(serviceForBikeDTO.email(), serviceForBikeDTO.fin());
+        List<BikeserviceHistory> bikeserviceHistories = bikeserviceHistoryRepository.findByEmailAndFin(email, fin);
         if(!bikeserviceHistories.isEmpty()) {
             List<BikeServiceDTO> bikeServices = bikeserviceHistories.stream().map(bikeserviceHistory -> {
                 String title = bikeserviceHistory.service.getTitle();
