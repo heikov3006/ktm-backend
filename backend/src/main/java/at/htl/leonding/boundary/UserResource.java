@@ -193,6 +193,10 @@ public class UserResource {
     public Response addBike(AddBikeDTO addBikeDTO) {
         User user = userRepository.getUserByEmail(addBikeDTO.email());
         Bike bike = bikeRepository.findById(addBikeDTO.bikeId());
+        String fin = addBikeDTO.fin();
+        if((fin.length() != 17 || fin.isBlank() || fin.contains("O") || fin.contains("I") || fin.contains("Q")) || !fin.matches("[0-9]+[a-zA-Z]+")) {
+            return Response.accepted("FIN is invalid").build();
+        }
         if (user != null && bike != null) {
             try {
                 BikeUser bikeUser = new BikeUser(addBikeDTO.fin(), user, bike, addBikeDTO.km(), addBikeDTO.imgUrl());
