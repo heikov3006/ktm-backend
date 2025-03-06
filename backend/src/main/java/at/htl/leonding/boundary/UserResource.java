@@ -194,7 +194,7 @@ public class UserResource {
         User user = userRepository.getUserByEmail(addBikeDTO.email());
         Bike bike = bikeRepository.findById(addBikeDTO.bikeId());
         String fin = addBikeDTO.fin();
-        if((fin.length() != 17 || fin.isBlank() || fin.contains("O") || fin.contains("I") || fin.contains("Q")) || !fin.matches("[0-9]+[a-zA-Z]+")) {
+        if((fin.length() != 17 || fin.isBlank() || fin.contains("O") || fin.contains("I") || fin.contains("Q")) || !fin.matches("[0-9a-zA-Z]+")) {
             return Response.accepted("FIN is invalid").build();
         }
         if (user != null && bike != null) {
