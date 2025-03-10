@@ -33,7 +33,7 @@ import java.util.stream.Stream;
 @Path("maintenance")
 public class UserResource {
 
-    private final String MAILGUN_API_KEY = "9ac534cff650651e7c46731ecd838553-0920befd-d0f16de6";
+    private final String MAILGUN_API_KEY = "131d31d673b46a3d4650046561e88141-623424ea-a9eacff4";
 
     @Inject
     UserRepository userRepository;
@@ -63,7 +63,7 @@ public class UserResource {
                     User user = new User(userCreationDTO.firstname(), userCreationDTO.lastname(), userCreationDTO.email(), hashedPassword);
                     userRepository.persist(user);
                     try {
-                        HttpResponse<JsonNode> request = Unirest.post("https://api.mailgun.net/v3/sandboxe50a7d82c26c4fed88697d548556ced8.mailgun.org/messages")
+                        HttpResponse<JsonNode> request = Unirest.post("https://api.mailgun.net/v3/sandbox82afda1f07fe46f9946da9510b441784.mailgun.org/messages")
                                 .basicAuth("api", MAILGUN_API_KEY)
                                 .queryString("from", "KTM MAINTENANCE <maintenance@ktm.com>")
                                 .queryString("to", user.getEmail())
@@ -130,7 +130,7 @@ public class UserResource {
                 }
                 User updatedUser = userRepository.updateUser(userEditingDTO.email(), userEditingDTO.user());
                 try {
-                    HttpResponse<JsonNode> request = Unirest.post("https://api.mailgun.net/v3/sandboxe50a7d82c26c4fed88697d548556ced8.mailgun.org/messages")
+                    HttpResponse<JsonNode> request = Unirest.post("https://api.mailgun.net/v3/sandbox82afda1f07fe46f9946da9510b441784.mailgun.org/messages")
                             .basicAuth("api", MAILGUN_API_KEY)
                             .queryString("from", "KTM MAINTENANCE <maintenance@ktm.com>")
                             .queryString("to", user.getEmail())
@@ -171,7 +171,7 @@ public class UserResource {
             userBikeRepository.deleteByEmail(userToDelete.getEmail());
             userRepository.deleteByEmail(userToDelete.getEmail());
             try {
-                HttpResponse<JsonNode> request = Unirest.post("https://api.mailgun.net/v3/sandboxe50a7d82c26c4fed88697d548556ced8.mailgun.org/messages")
+                HttpResponse<JsonNode> request = Unirest.post("https://api.mailgun.net/v3/sandbox82afda1f07fe46f9946da9510b441784.mailgun.org/messages")
                         .basicAuth("api", MAILGUN_API_KEY)
                         .queryString("from", "KTM MAINTENANCE <maintenance@ktm.com>")
                         .queryString("to", userDeleteDTO.email())
@@ -202,7 +202,7 @@ public class UserResource {
                 BikeUser bikeUser = new BikeUser(addBikeDTO.fin(), user, bike, addBikeDTO.km(), addBikeDTO.imgUrl());
                 userBikeRepository.persist(bikeUser);
                 try {
-                    HttpResponse<JsonNode> request = Unirest.post("https://api.mailgun.net/v3/sandboxe50a7d82c26c4fed88697d548556ced8.mailgun.org/messages")
+                    HttpResponse<JsonNode> request = Unirest.post("https://api.mailgun.net/v3/sandbox82afda1f07fe46f9946da9510b441784.mailgun.org/messages")
                             .basicAuth("api", MAILGUN_API_KEY)
                             .queryString("from", "KTM MAINTENANCE <maintenance@ktm.com>")
                             .queryString("to", user.getEmail())
@@ -232,7 +232,7 @@ public class UserResource {
             bikeserviceHistoryRepository.deleteEmail(addBikeDTO.email());
             userBikeRepository.deleteByEmailAndFin(addBikeDTO.email(), addBikeDTO.fin());
             try {
-                HttpResponse<JsonNode> request = Unirest.post("https://api.mailgun.net/v3/sandboxe50a7d82c26c4fed88697d548556ced8.mailgun.org/messages")
+                HttpResponse<JsonNode> request = Unirest.post("https://api.mailgun.net/v3/sandbox82afda1f07fe46f9946da9510b441784.mailgun.org/messages")
                         .basicAuth("api", MAILGUN_API_KEY)
                         .queryString("from", "KTM MAINTENANCE <maintenance@ktm.com>")
                         .queryString("to", user.getEmail())

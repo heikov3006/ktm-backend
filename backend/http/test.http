@@ -13,9 +13,9 @@ POST http://localhost:8080/maintenance/register
 Content-Type: application/json
 
 {
-  "firstname": "Heiko",
-  "lastname": "Vichtbauer",
-  "email": "heiko.v3006@gmail.com",
+  "firstname": "Oliver",
+  "lastname": "Schatzberger",
+  "email": "o.writeshoot2004@gmail.com",
   "password": "ja",
   "passwordConfirm": "ja"
 }
@@ -26,7 +26,7 @@ POST http://localhost:8080/maintenance/login
 Content-Type: application/json
 
 {
-  "email": "heiko.v3006@gmail.com",
+  "email": "oliver.schatzberger@outlook.com",
   "password": "ja"
 }
 
