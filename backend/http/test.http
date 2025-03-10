@@ -76,7 +76,7 @@ Content-Type: application/json
   "fin": "12345678901234567",
   "email": "heiko.v3006@gmail.com",
   "bikeId": 1,
-  "km": 30000,
+  "km": 3000,
   "imgUrl": "https://www.google.com"
 }
 
@@ -100,7 +100,7 @@ Content-Type: application/json
   "email": "heiko.v3006@gmail.com",
   "fin": "12345678901234567",
   "serviceId": 1,
-  "km": 3000
+  "km": 1000
 }
 
 ###

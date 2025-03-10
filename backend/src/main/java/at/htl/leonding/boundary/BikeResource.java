@@ -95,6 +95,11 @@ public class BikeResource {
             return Response.status(Response.Status.NOT_FOUND).entity("Service not found").build();
         }
 
+        int interval = service.getInterval();
+        int kmAtService = addServiceHistoryDTO.km();
+        Long actualKm = bikeUser.getKm();
+        int restKm = interval - (actualKm.intValue()-kmAtService);
+
         // Erstelle den History-Eintrag
         bikeserviceHistory.setService(service); // Setze das Service
         bikeserviceHistory.setFin(bikeUser.getFin()); // Setze die FIN
@@ -110,7 +115,7 @@ public class BikeResource {
                     .queryString("subject", "Service " + service.getTitle() + " for your " + bike.getBrand() + ' ' + bike.getModel())
                     .queryString("text", "The service " + service.getTitle() + " for your " + bike.getBrand() + ' ' + bike.getModel() + " has been added to your history. You had " + bikeserviceHistory.getKilometersAtService() + " km at this time.")
                     .asJson();
-            return Response.ok("History added").build();
+            return Response.ok(restKm).build();
         } catch (UnirestException ex) {
             return Response.accepted("exception sending email").build();
         }
