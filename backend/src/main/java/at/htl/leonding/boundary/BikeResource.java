@@ -97,8 +97,7 @@ public class BikeResource {
 
         int interval = service.getInterval();
         int kmAtService = addServiceHistoryDTO.km();
-        Long actualKm = bikeUser.getKm();
-        int restKm = interval - (actualKm.intValue()-kmAtService);
+        int restKm = interval - kmAtService;
 
         // Erstelle den History-Eintrag
         bikeserviceHistory.setService(service); // Setze das Service
