@@ -3,6 +3,7 @@ package at.htl.leonding.boundary;
 import at.htl.leonding.dto.AddServiceHistoryDTO;
 import at.htl.leonding.dto.BikeHistoryDTO;
 import at.htl.leonding.dto.BikeUserAndServiceDTO;
+import at.htl.leonding.dto.GetAllByFinDTO;
 import at.htl.leonding.model.Bike;
 import at.htl.leonding.model.BikeService;
 import at.htl.leonding.model.BikeUser;
@@ -65,11 +66,11 @@ public class BikeResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBikeServiceHistoryByFin(@PathParam("fin") String fin) {
-        List<BikeserviceHistory> returnList = bshrepo.getByFin(fin);
-        if (returnList.isEmpty()) {
+        GetAllByFinDTO getAllByFinDTO = bshrepo.getByFin(fin);
+        if (getAllByFinDTO == null) {
             return Response.status(Response.Status.NOT_FOUND).entity("No history found").build();
         }
-        return Response.ok(returnList.getLast()).build();
+        return Response.ok(getAllByFinDTO).build();
     }
 
     @Path("addServiceHistory")
@@ -82,6 +83,7 @@ public class BikeResource {
         bikeserviceHistory.setBikeUser(bikeUser);
         bikeserviceHistory.setServiceDate(LocalDate.now());
         bikeserviceHistory.setKilometersAtService(addServiceHistoryDTO.km());
+        bikeserviceHistory.setBikeId(bikeUser.getBike().getId());
         Bike bike = bikeRepository.findById(bikeUser.getBike().getId());
         if (bike == null) {
             return Response.status(Response.Status.NOT_FOUND).entity("Bike not found").build();

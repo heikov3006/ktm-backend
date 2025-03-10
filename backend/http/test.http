@@ -73,7 +73,7 @@ POST http://localhost:8080/maintenance/addBike
 Content-Type: application/json
 
 {
-  "fin": "JHASHDJJSHD",
+  "fin": "12345678901234567",
   "email": "heiko.v3006@gmail.com",
   "bikeId": 1,
   "km": 30000,
@@ -88,7 +88,7 @@ Content-Type: application/json
 {
   "email": "heiko.v3006@gmail.com",
   "bikeId": 1,
-  "fin": "JHASHDJJSHD"
+  "fin": "12345678901234567"
 }
 
 ###
@@ -98,54 +98,32 @@ Content-Type: application/json
 
 {
   "email": "heiko.v3006@gmail.com",
-  "fin": "JHASHDJJSHD",
+  "fin": "12345678901234567",
   "serviceId": 1,
-  "km": 8000
+  "km": 3000
 }
 
 ###
 
 //Gesamte Historie eines Bikes für ein bestimmtes Service
-GET http://localhost:8080/maintenance/getBikeserviceHistory
-Content-Type: application/json
+GET http://localhost:8080/maintenance/getBikeserviceHistory/heiko.v3006@gmail.com/12345678901234567/1
 
-{
-  "email": "heiko.v3006@gmail.com",
-  "fin": "JHASHDJJSHD",
-  "serviceId": 1
-}
 
 ###
 
 //letzter Serviceeintrag für ein spezifisches Bike und spezifisches Service
-GET http://localhost:8080/maintenance/getBikeserviceHistory/last
-Content-Type: application/json
+GET http://localhost:8080/maintenance/getBikeserviceHistory/last/heiko.v3006@gmail.com/12345678901234567/1
 
-{
-  "email": "heiko.v3006@gmail.com",
-  "fin": "JHASHDJJSHD",
-  "serviceId": 25
-}
 
 ###
 
-GET http://localhost:8080/maintenance/getServicesByBike
-Content-Type: application/json
+GET http://localhost:8080/maintenance/getServicesByBike/1
 
-{
-  "bikeId": 1
-}
 
 ###
 
-GET http://localhost:8080/maintenance/getServiceListForSpecificBike
-Content-Type: application/json
-
-{
-  "email": "heiko.v3006@gmail.com",
-  "fin": "JHASHDJJSHD"
-}
+GET http://localhost:8080/maintenance/getServiceListForSpecificBike/heiko.v3006@gmail.com/12345678901234567
 
 ###
 
-GET http://localhost:8080/maintenance/getBikeserviceHistory/fin/JHASHDJJSHD
+GET http://localhost:8080/maintenance/getBikeserviceHistory/fin/12345678901234567

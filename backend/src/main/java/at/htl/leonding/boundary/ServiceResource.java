@@ -58,11 +58,11 @@ public class ServiceResource {
         List<BikeserviceHistory> bikeserviceHistories = bikeserviceHistoryRepository.findByEmailAndFin(email, fin);
         if(!bikeserviceHistories.isEmpty()) {
             List<BikeServiceDTO> bikeServices = bikeserviceHistories.stream().map(bikeserviceHistory -> {
-                String title = bikeserviceHistory.service.getTitle();
-                int interval = bikeserviceHistory.service.getInterval();
-                Long serviceId = bikeserviceHistory.service.getId();
-                int kilometersAtService = bikeserviceHistory.kilometersAtService;
-                Long actualKm = bikeserviceHistory.bikeUser.getKm();
+                String title = bikeserviceHistory.getService().getTitle();
+                int interval = bikeserviceHistory.getService().getInterval();
+                Long serviceId = bikeserviceHistory.getService().getId();
+                int kilometersAtService = bikeserviceHistory.getKilometersAtService();
+                Long actualKm = bikeserviceHistory.getBikeUser().getKm();
                 return new BikeServiceDTO(title, interval, serviceId, kilometersAtService, actualKm);
             }).toList();
             return Response.ok(new GetServiceListForSpecificBikeDTO(bikeServiceList, bikeServices)).build();

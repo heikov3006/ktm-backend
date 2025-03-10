@@ -9,22 +9,25 @@ public class BikeserviceHistory extends PanacheEntity {
 
     @ManyToOne()
     @JoinColumn(name = "userBikeId")
-    public BikeUser bikeUser;  // Verknüpfung zur BikeUser-Tabelle
+    private BikeUser bikeUser;  // Verknüpfung zur BikeUser-Tabelle
 
-    String fin;
+    private String fin;
 
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "serviceId", nullable = false)
-    public BikeService service; // Verknüpfung zur BikeService-Tabelle
+    private BikeService service; // Verknüpfung zur BikeService-Tabelle
 
     @Column(nullable = false)
-    public LocalDate serviceDate;  // Datum der Durchführung
+    private LocalDate serviceDate;  // Datum der Durchführung
 
     @Column(nullable = false)
-    public int kilometersAtService; // Kilometerstand beim Service
+    private int kilometersAtService; // Kilometerstand beim Service
 
     @Column(nullable = false, updatable = false)
-    public LocalDate createdAt = LocalDate.now(); // Zeitstempel der Erstellung
+    private Long bikeId;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDate createdAt = LocalDate.now(); // Zeitstempel der Erstellung
 
     @PreUpdate
     protected void onUpdate() {
@@ -32,7 +35,15 @@ public class BikeserviceHistory extends PanacheEntity {
     }
 
     @Column(nullable = false)
-    public LocalDate updatedAt = LocalDate.now(); // Zeitstempel der letzten Änderung
+    private LocalDate updatedAt = LocalDate.now(); // Zeitstempel der letzten Änderung
+
+    public Long getBikeId() {
+        return bikeId;
+    }
+
+    public void setBikeId(Long bikeId) {
+        this.bikeId = bikeId;
+    }
 
     public BikeUser getBikeUser() {
         return bikeUser;

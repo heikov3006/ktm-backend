@@ -1,16 +1,27 @@
 package at.htl.leonding.repository;
 
 import at.htl.leonding.dto.BikeUserAndServiceDTO;
+import at.htl.leonding.dto.GetAllByFinDTO;
+import at.htl.leonding.dto.GetByFinDTO;
+import at.htl.leonding.model.Bike;
 import at.htl.leonding.model.BikeserviceHistory;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
 public class BikeserviceHistoryRepository implements PanacheRepository<BikeserviceHistory> {
+
+    private final BikeRepository bikeRepository;
+
+    @jakarta.inject.Inject
+    public BikeserviceHistoryRepository(BikeRepository bikeRepository) {
+        this.bikeRepository = bikeRepository;
+    }
 
     public List<BikeUserAndServiceDTO> findByBikeUserAndService(String email, String fin, Long serviceId) {
         if (!email.isEmpty() && !fin.isEmpty() && serviceId != null) {
@@ -34,8 +45,15 @@ public class BikeserviceHistoryRepository implements PanacheRepository<Bikeservi
         return null;
     }
 
-    public List<BikeserviceHistory> getByFin(String fin) {
-        return getEntityManager().createQuery("select bsh from BikeserviceHistory bsh where bsh.fin = :fin").setParameter("fin", fin).getResultList();
+    public GetAllByFinDTO getByFin(String fin) {
+        List<BikeserviceHistory> bikeserviceHistoryList = getEntityManager().createQuery("select bsh from BikeserviceHistory bsh where bsh.fin = :fin").setParameter("fin", fin).getResultList();
+        List<GetByFinDTO> getByFinDTOList = new ArrayList<>();
+        bikeserviceHistoryList.forEach(bikeserviceHistory -> {
+            GetByFinDTO getByFinDTO = new GetByFinDTO(bikeserviceHistory.getService(), bikeserviceHistory.getServiceDate(), bikeserviceHistory.getKilometersAtService(), bikeserviceHistory.getCreatedAt());
+            getByFinDTOList.add(getByFinDTO);
+        });
+        Bike bike = bikeRepository.findById(bikeserviceHistoryList.getFirst().getBikeId());
+        return new GetAllByFinDTO(fin, bike, getByFinDTOList);
     }
 
     public void deleteEmail(String email) {
