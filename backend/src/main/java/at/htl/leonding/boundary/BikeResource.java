@@ -119,4 +119,17 @@ public class BikeResource {
             return Response.accepted("exception sending email").build();
         }
     }
+
+    @Path("addKmToBike/{email}/{fin}/{km}")
+    @POST
+    @Transactional
+    public Response addKmToBike(@PathParam("email") String email, @PathParam("fin") String fin, @PathParam("km") Long km) {
+        BikeUser bikeUser = ubrepo.getBikeUserByMailAndFin(email, fin);
+        if (bikeUser == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity("Bike not found").build();
+        }
+        bikeUser.setKm(km);
+        ubrepo.persist(bikeUser);
+        return Response.ok().build();
+    }
 }

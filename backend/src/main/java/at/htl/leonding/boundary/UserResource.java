@@ -33,7 +33,7 @@ import java.util.stream.Stream;
 @Path("maintenance")
 public class UserResource {
 
-    private final String MAILGUN_API_KEY = "131d31d673b46a3d4650046561e88141-623424ea-a9eacff4";
+    //private final String MAILGUN_API_KEY = "131d31d673b46a3d4650046561e88141-623424ea-a9eacff4";
 
     @Inject
     UserRepository userRepository;
@@ -62,7 +62,7 @@ public class UserResource {
                     String hashedPassword = Encryption.generateSaltedHash(userCreationDTO.password().toCharArray());
                     User user = new User(userCreationDTO.firstname(), userCreationDTO.lastname(), userCreationDTO.email(), hashedPassword);
                     userRepository.persist(user);
-                    sendMail(user.getEmail(), "Registration successful", "You have successfully registered to KTM Maintenance!");
+                    //sendMail(user.getEmail(), "Registration successful", "You have successfully registered to KTM Maintenance!");
                     return Response.ok(getUserBikeDTO(user)).build();
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -119,7 +119,7 @@ public class UserResource {
                     return Response.ok("failed generating salted hash password").status(300).build();
                 }
                 User updatedUser = userRepository.updateUser(userEditingDTO.email(), userEditingDTO.user());
-                sendMail(user.getEmail(), "Profile updated", "Your profile has been updated successfully!");
+                //sendMail(user.getEmail(), "Profile updated", "Your profile has been updated successfully!");
                 return Response.ok(updatedUser).build();
             } else {
                 return Response.status(498, "Wrong password").build();
@@ -150,7 +150,7 @@ public class UserResource {
             });
             userBikeRepository.deleteByEmail(userToDelete.getEmail());
             userRepository.deleteByEmail(userToDelete.getEmail());
-            sendMail(userToDelete.getEmail(), "Account deleted", "Your account has been deleted successfully!");
+            //sendMail(userToDelete.getEmail(), "Account deleted", "Your account has been deleted successfully!");
             return Response.ok("Email sent").build();
         }
         return Response.accepted("Wrong password").build();
@@ -171,7 +171,7 @@ public class UserResource {
             try {
                 BikeUser bikeUser = new BikeUser(addBikeDTO.fin(), user, bike, addBikeDTO.km(), addBikeDTO.imgUrl());
                 userBikeRepository.persist(bikeUser);
-                sendMail(user.getEmail(), "Bike added", "Bike " + bike.getBrand() + ' ' + bike.getModel() + " with FIN " + addBikeDTO.fin() + " has been added to your account!");
+                //sendMail(user.getEmail(), "Bike added", "Bike " + bike.getBrand() + ' ' + bike.getModel() + " with FIN " + addBikeDTO.fin() + " has been added to your account!");
                 return Response.ok(getUserBikeDTO(user)).build();
             } catch (Exception ex) {
                 return Response.accepted("Bike with this FIN is already used").build();
@@ -191,7 +191,7 @@ public class UserResource {
         if (user != null && bike != null) {
             bikeserviceHistoryRepository.deleteEmail(addBikeDTO.email());
             userBikeRepository.deleteByEmailAndFin(addBikeDTO.email(), addBikeDTO.fin());
-            sendMail(user.getEmail(), "Bike deleted", "Bike " + bike.getBrand() + ' ' + bike.getModel() + " with FIN " + addBikeDTO.fin() + " has been deleted from your account!");
+            //sendMail(user.getEmail(), "Bike deleted", "Bike " + bike.getBrand() + ' ' + bike.getModel() + " with FIN " + addBikeDTO.fin() + " has been deleted from your account!");
             return Response.ok(getUserBikeDTO(user)).build();
         }
         return Response.accepted("No such user or bike").build();
@@ -204,13 +204,9 @@ public class UserResource {
     }
 
     private void sendMail(String email, String subject, String text) {
-        String apiKey = System.getenv("API_KEY");
-        if (apiKey == null) {
-            apiKey = "API_KEY";
-        }
         try {
             HttpResponse<JsonNode> request = Unirest.post("https://api.mailgun.net/v3/sandbox82afda1f07fe46f9946da9510b441784.mailgun.org/messages")
-                    .basicAuth("api", apiKey)
+                    .basicAuth("api", "")
                     .queryString("from", "KTM MAINTENANCE <maintenance@ktm.com>")
                     .queryString("to", email)
                     .queryString("subject", subject)
