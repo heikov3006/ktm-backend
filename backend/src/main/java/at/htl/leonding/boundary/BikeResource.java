@@ -22,6 +22,8 @@ import jakarta.ws.rs.core.Response;
 import java.time.LocalDate;
 import java.util.List;
 
+import static java.lang.Long.parseLong;
+
 @Path("maintenance")
 public class BikeResource {
 
@@ -126,6 +128,20 @@ public class BikeResource {
         }
     }
 
+    @Path("addKm")
+    @POST
+    @Transactional
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addKm(AddKmDTO addKmDTO) {
+        BikeUser bikeUser = ubrepo.getBikeUserByFin(addKmDTO.finInput());
+        if (bikeUser == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity("Bike not found").build();
+        }
+        bikeUser.setKm(parseLong(addKmDTO.kmInput()));
+        ubrepo.persist(bikeUser);
+        return Response.ok().build();
+    }
+
     @Path("addServiceHistoryFromShop")
     @POST
     @Transactional
@@ -133,8 +149,7 @@ public class BikeResource {
     public Response addServiceHistoryFromShop(AddServiceHistoryFromShopDTO addServiceHistoryDTO) {
         System.out.println(addServiceHistoryDTO.bike().getClass());
         BikeserviceHistory bikeserviceHistory = new BikeserviceHistory();
-        BikeUser bikeUser = ubrepo.getBikeUserByFin(addServiceHistoryDTO.fin());
-        bikeserviceHistory.setBikeUser(bikeUser);
+        bikeserviceHistory.setBikeUser(null);
         bikeserviceHistory.setServiceDate(LocalDate.now());
         bikeserviceHistory.setKilometersAtService(addServiceHistoryDTO.km());
         bikeserviceHistory.setBikeId(addServiceHistoryDTO.bike());
