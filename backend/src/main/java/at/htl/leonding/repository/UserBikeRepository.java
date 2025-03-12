@@ -26,4 +26,8 @@ public class UserBikeRepository implements PanacheRepository<BikeUser> {
         getEntityManager().createQuery("delete from BikeUser bu where bu.user.email = :email and bu.fin like :fin").setParameter("email", email).setParameter("fin", fin).executeUpdate();
 
     }
+
+    public BikeUser getBikeUserByFin(String fin) {
+        return (BikeUser) getEntityManager().createQuery("select bu from BikeUser bu where bu.fin like :fin").setParameter("fin", fin).getSingleResult();
+    }
 }

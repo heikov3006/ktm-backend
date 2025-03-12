@@ -1,9 +1,6 @@
 package at.htl.leonding.boundary;
 
-import at.htl.leonding.dto.AddServiceHistoryDTO;
-import at.htl.leonding.dto.BikeHistoryDTO;
-import at.htl.leonding.dto.BikeUserAndServiceDTO;
-import at.htl.leonding.dto.GetAllByFinDTO;
+import at.htl.leonding.dto.*;
 import at.htl.leonding.model.Bike;
 import at.htl.leonding.model.BikeService;
 import at.htl.leonding.model.BikeUser;
@@ -41,6 +38,15 @@ public class BikeResource {
 
     @Inject
     BikeRepository bikeRepository;
+
+    @Path("allBikes")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllBikes() {
+        return Response.ok(
+                bikeRepository.listAll()
+        ).build();
+    }
 
     @Path("getBikeserviceHistory/{email}/{fin}/{serviceId}")
     @GET
@@ -120,16 +126,26 @@ public class BikeResource {
         }
     }
 
-    @Path("addKmToBike/{email}/{fin}/{km}")
+    @Path("addServiceHistoryFromShop")
     @POST
     @Transactional
-    public Response addKmToBike(@PathParam("email") String email, @PathParam("fin") String fin, @PathParam("km") Long km) {
-        BikeUser bikeUser = ubrepo.getBikeUserByMailAndFin(email, fin);
-        if (bikeUser == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity("Bike not found").build();
-        }
-        bikeUser.setKm(km);
-        ubrepo.persist(bikeUser);
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addServiceHistoryFromShop(AddServiceHistoryFromShopDTO addServiceHistoryDTO) {
+        System.out.println(addServiceHistoryDTO.bike().getClass());
+        BikeserviceHistory bikeserviceHistory = new BikeserviceHistory();
+        BikeUser bikeUser = ubrepo.getBikeUserByFin(addServiceHistoryDTO.fin());
+        bikeserviceHistory.setBikeUser(bikeUser);
+        bikeserviceHistory.setServiceDate(LocalDate.now());
+        bikeserviceHistory.setKilometersAtService(addServiceHistoryDTO.km());
+        bikeserviceHistory.setBikeId(addServiceHistoryDTO.bike());
+        // Erstelle den History-Eintrag
+        BikeService service = bsrepo.findServiceById(addServiceHistoryDTO.service());
+        bikeserviceHistory.setService(service); // Setze das Service
+        bikeserviceHistory.setFin(addServiceHistoryDTO.fin()); // Setze die FIN
+
+        // Speichere die Historie
+        bshrepo.persist(bikeserviceHistory);
+
         return Response.ok().build();
     }
 }

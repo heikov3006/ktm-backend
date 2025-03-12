@@ -105,6 +105,17 @@ Content-Type: application/json
 
 ###
 
+POST http://localhost:8080/maintenance/addKmToBike
+Content-Type: application/json
+
+{
+  "emailInput": "heiko.v3006@gmail.com",
+  "finInput": "12345678901234567",
+  "kmInput": 100
+}
+
+###
+
 //Gesamte Historie eines Bikes für ein bestimmtes Service
 GET http://localhost:8080/maintenance/getBikeserviceHistory/heiko.v3006@gmail.com/12345678901234567/1
 
