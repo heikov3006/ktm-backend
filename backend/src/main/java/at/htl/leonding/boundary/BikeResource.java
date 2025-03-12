@@ -107,6 +107,11 @@ public class BikeResource {
         int kmAtService = addServiceHistoryDTO.km();
         int nextKm = kmAtService + interval;
 
+        if(kmAtService > bikeUser.getKm()) {
+            bikeUser.setKm((long) kmAtService);
+            ubrepo.persist(bikeUser);
+        }
+
         // Erstelle den History-Eintrag
         bikeserviceHistory.setService(service); // Setze das Service
         bikeserviceHistory.setFin(bikeUser.getFin()); // Setze die FIN
