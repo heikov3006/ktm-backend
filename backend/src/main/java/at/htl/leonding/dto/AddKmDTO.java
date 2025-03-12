@@ -1,4 +1,4 @@
 package at.htl.leonding.dto;
 
-public record AddKmDTO(String finInput, String kmInput) {
+public record AddKmDTO(String fin, String km) {
 }

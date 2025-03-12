@@ -133,11 +133,12 @@ public class BikeResource {
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addKm(AddKmDTO addKmDTO) {
-        BikeUser bikeUser = ubrepo.getBikeUserByFin(addKmDTO.finInput());
+        System.out.println(addKmDTO);
+        BikeUser bikeUser = ubrepo.getBikeUserByFin(addKmDTO.fin());
         if (bikeUser == null) {
             return Response.status(Response.Status.NOT_FOUND).entity("Bike not found").build();
         }
-        bikeUser.setKm(parseLong(addKmDTO.kmInput()));
+        bikeUser.setKm(bikeUser.getKm() + parseLong(addKmDTO.km()));
         ubrepo.persist(bikeUser);
         return Response.ok().build();
     }
