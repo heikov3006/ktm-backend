@@ -178,4 +178,15 @@ public class BikeResource {
 
         return Response.ok().build();
     }
+
+    @Path("getKm/{fin}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getKm(@PathParam("fin") String fin) {
+        BikeUser bikeUser = ubrepo.getBikeUserByFin(fin);
+        if (bikeUser == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity("Bike not found").build();
+        }
+        return Response.ok(bikeUser.getKm()).build();
+    }
 }
