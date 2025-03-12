@@ -150,7 +150,21 @@ public class BikeResource {
     public Response addServiceHistoryFromShop(AddServiceHistoryFromShopDTO addServiceHistoryDTO) {
         System.out.println(addServiceHistoryDTO.bike().getClass());
         BikeserviceHistory bikeserviceHistory = new BikeserviceHistory();
-        bikeserviceHistory.setBikeUser(null);
+        BikeUser bikeUser = null;
+        int tempKm = addServiceHistoryDTO.km();
+        try {
+            bikeUser = ubrepo.getBikeUserByFin(addServiceHistoryDTO.fin());
+        } catch (Exception e) {
+        }
+        if(bikeUser != null) {
+            bikeserviceHistory.setBikeUser(bikeUser);
+            if(tempKm > bikeUser.getKm()) {
+                bikeUser.setKm((long) tempKm);
+                ubrepo.persist(bikeUser);
+            }
+        } else {
+            bikeserviceHistory.setBikeUser(null);
+        }
         bikeserviceHistory.setServiceDate(LocalDate.now());
         bikeserviceHistory.setKilometersAtService(addServiceHistoryDTO.km());
         bikeserviceHistory.setBikeId(addServiceHistoryDTO.bike());
