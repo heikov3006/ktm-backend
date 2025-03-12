@@ -105,7 +105,7 @@ public class BikeResource {
 
         int interval = service.getInterval();
         int kmAtService = addServiceHistoryDTO.km();
-        int restKm = interval - kmAtService;
+        int nextKm = kmAtService + interval;
 
         // Erstelle den History-Eintrag
         bikeserviceHistory.setService(service); // Setze das Service
@@ -122,7 +122,7 @@ public class BikeResource {
                     .queryString("subject", "Service " + service.getTitle() + " for your " + bike.getBrand() + ' ' + bike.getModel())
                     .queryString("text", "The service " + service.getTitle() + " for your " + bike.getBrand() + ' ' + bike.getModel() + " has been added to your history. You had " + bikeserviceHistory.getKilometersAtService() + " km at this time.")
                     .asJson();
-            return Response.ok(restKm).build();
+            return Response.ok(nextKm).build();
         } catch (UnirestException ex) {
             return Response.accepted("exception sending email").build();
         }
