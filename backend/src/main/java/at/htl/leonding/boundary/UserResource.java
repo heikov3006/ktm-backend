@@ -22,6 +22,7 @@ import jakarta.ws.rs.core.Response;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -35,7 +36,7 @@ import static java.lang.Long.parseLong;
 @Path("maintenance")
 public class UserResource {
 
-    //private final String MAILGUN_API_KEY = "131d31d673b46a3d4650046561e88141-623424ea-a9eacff4";
+    @ConfigProperty(name = "mailgun.api.key")
 
     @Inject
     UserRepository userRepository;
