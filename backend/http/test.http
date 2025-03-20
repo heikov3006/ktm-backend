@@ -73,7 +73,7 @@ POST http://localhost:8080/maintenance/addBike
 Content-Type: application/json
 
 {
-  "fin": "12345678901234562",
+  "fin": "12325678901234562",
   "email": "heiko.v3006@gmail.com",
   "bikeId": 1,
   "km": 3000,
