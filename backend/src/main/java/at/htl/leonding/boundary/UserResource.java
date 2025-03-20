@@ -213,7 +213,7 @@ public class UserResource {
         try {
             mailer.send(new Mail().setText(text).setSubject(subject).setTo(List.of(email)).setFrom("KTM MAINTENANCE <maintenance@ktm.com>"));
         } catch (Exception ex) {
-            System.out.println("exception sending email");
+            System.out.println(ex.getMessage());
         }
     }
 }
