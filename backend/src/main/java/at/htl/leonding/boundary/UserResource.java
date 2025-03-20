@@ -41,6 +41,9 @@ public class UserResource {
     @Inject
     Mailer mailer;
 
+    @ConfigProperty(name = "quarkus.mailer.password")
+    String password;
+
     @Inject
     UserRepository userRepository;
     @Inject
@@ -140,6 +143,7 @@ public class UserResource {
     @Transactional
     //https://app.mailgun.com/mg/sending/sandboxe50a7d82c26c4fed88697d548556ced8.mailgun.org/logs?dateRange=%7B%22endDate%22%3A%222024-12-22T22%3A59%3A59.999Z%22%2C%22startDate%22%3A%222024-12-14T23%3A00%3A00.000Z%22%7D&fields=Event%2CSender%2CRecipient%2CDelivery+Status+Message&page=1&search=
     public Response deleteUser(UserDeleteDTO userDeleteDTO) {
+        System.out.println(password);
         User userToDelete = userRepository.getUserByEmail(userDeleteDTO.email());
         String actualPW = userToDelete.getPassword();
         boolean isVerified = false;
