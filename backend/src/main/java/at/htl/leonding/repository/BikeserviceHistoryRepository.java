@@ -49,7 +49,7 @@ public class BikeserviceHistoryRepository implements PanacheRepository<Bikeservi
         List<BikeserviceHistory> bikeserviceHistoryList = getEntityManager().createQuery("select bsh from BikeserviceHistory bsh where bsh.fin = :fin").setParameter("fin", fin).getResultList();
         List<GetByFinDTO> getByFinDTOList = new ArrayList<>();
         bikeserviceHistoryList.forEach(bikeserviceHistory -> {
-            GetByFinDTO getByFinDTO = new GetByFinDTO(bikeserviceHistory.getService(), bikeserviceHistory.getServiceDate(), bikeserviceHistory.getKilometersAtService(), bikeserviceHistory.getCreatedAt());
+            GetByFinDTO getByFinDTO = new GetByFinDTO(bikeserviceHistory.getService(), bikeserviceHistory.getServiceDate(), bikeserviceHistory.getKilometersAtService(), bikeserviceHistory.getCreatedAt(), bikeserviceHistory.getServiceType());
             getByFinDTOList.add(getByFinDTO);
         });
         Bike bike = bikeRepository.findById(bikeserviceHistoryList.getFirst().getBikeId());
