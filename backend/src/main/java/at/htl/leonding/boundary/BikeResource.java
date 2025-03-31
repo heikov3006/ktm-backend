@@ -1,6 +1,7 @@
 package at.htl.leonding.boundary;
 
 import at.htl.leonding.dto.*;
+import at.htl.leonding.enums.ServiceType;
 import at.htl.leonding.model.Bike;
 import at.htl.leonding.model.BikeService;
 import at.htl.leonding.model.BikeUser;
@@ -115,6 +116,7 @@ public class BikeResource {
         // Erstelle den History-Eintrag
         bikeserviceHistory.setService(service); // Setze das Service
         bikeserviceHistory.setFin(bikeUser.getFin()); // Setze die FIN
+        bikeserviceHistory.setServiceType(ServiceType.PRIVAT); // Setze den Service-Typ
 
         // Speichere die Historie
         bshrepo.persist(bikeserviceHistory);
@@ -173,6 +175,7 @@ public class BikeResource {
         bikeserviceHistory.setServiceDate(LocalDate.now());
         bikeserviceHistory.setKilometersAtService(addServiceHistoryDTO.km());
         bikeserviceHistory.setBikeId(addServiceHistoryDTO.bike());
+        bikeserviceHistory.setServiceType(ServiceType.WERKSTATT); // Setze den Service-Typ
         // Erstelle den History-Eintrag
         BikeService service = bsrepo.findServiceById(addServiceHistoryDTO.service());
         bikeserviceHistory.setService(service); // Setze das Service

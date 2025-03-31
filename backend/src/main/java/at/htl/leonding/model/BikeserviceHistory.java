@@ -1,5 +1,6 @@
 package at.htl.leonding.model;
 
+import at.htl.leonding.enums.ServiceType;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
 import java.time.LocalDate;
@@ -36,6 +37,18 @@ public class BikeserviceHistory extends PanacheEntity {
 
     @Column(nullable = false)
     private LocalDate updatedAt = LocalDate.now(); // Zeitstempel der letzten Änderung
+
+    @Column(nullable = true)
+    @Enumerated(EnumType.STRING)
+    private ServiceType serviceType;
+
+    public ServiceType getServiceType() {
+        return serviceType;
+    }
+
+    public void setServiceType(ServiceType serviceType) {
+        this.serviceType = serviceType;
+    }
 
     public Long getBikeId() {
         return bikeId;

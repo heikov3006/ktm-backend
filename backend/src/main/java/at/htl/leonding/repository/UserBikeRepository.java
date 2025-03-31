@@ -31,3 +31,4 @@ public class UserBikeRepository implements PanacheRepository<BikeUser> {
         return (BikeUser) getEntityManager().createQuery("select bu from BikeUser bu where bu.fin like :fin").setParameter("fin", fin).getSingleResult();
     }
 }
+
